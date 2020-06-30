@@ -2,7 +2,14 @@
 	margin: 0 auto; 
 }
 
-.main_layout {
+.login_view_layout {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(50px, auto);
+}
+
+.submit_story_view_layout {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-gap: 10px;
@@ -21,18 +28,37 @@
     font-weight: 500;
 }
 
+.login_name_area {
+    grid-column: 5 / 7;
+    grid-row: 3;
+
+    resize: none; 
+}
+
+.login_room_area {
+    grid-column: 5 / 7;
+    grid-row: 4;
+
+    resize: none; 
+}
+
+.login_button {
+    grid-column: 5 / 7;
+    grid-row: 5;
+}
+
 .output_text_area {
-    grid-column: 5 / 10;
+    grid-column: 4 / 10;
     grid-row: 3 / 5;
 }
 
 .input_text_area {
-    grid-column: 5 / 10;
+    grid-column: 4 / 10;
     grid-row: 5 / 7;
 }
 
 .submit_button {
-    grid-column: 5 / 10;
+    grid-column: 4 / 10;
     grid-row: 7;
 }
 
