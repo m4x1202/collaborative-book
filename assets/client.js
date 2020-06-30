@@ -57,10 +57,13 @@ var websocket = openConnectionToServer();
 
 function submitText()
 {
-    var text = document.getElementById("input_text_area").value;
+    var input_text_area = document.getElementById("input_text_area");
+    var text = input_text_area.value;
 
     var message = { type : "text", name : "Mobbel", room : "Doppelhaus", text : text };
     sendToServer(websocket, message);
+
+    input_text_area.value = "";
 }
 
 
