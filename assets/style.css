@@ -1,0 +1,85 @@
+.centered {
+	margin: 0 auto; 
+}
+
+.main_layout {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(50px, auto);
+}
+
+.title_text {
+    grid-column: 5 / 10;
+    grid-row: 2;
+
+    justify-self: end;
+    align-self: end;
+
+    font-family: inherit;
+    font-size: 40px;
+    font-weight: 500;
+}
+
+.output_text_area {
+    grid-column: 5 / 10;
+    grid-row: 3 / 5;
+}
+
+.input_text_area {
+    grid-column: 5 / 10;
+    grid-row: 5 / 7;
+}
+
+.submit_button {
+    grid-column: 5 / 10;
+    grid-row: 7;
+}
+
+.side_bar
+{
+    grid-column: 3;
+    grid-row: 3 / 8;
+    
+    resize: vertical; /* user can resize vertically, but width is fixed */
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    padding: 0;
+    border: none;
+    padding: 20px;
+}
+
+textarea {
+    resize: vertical; /* user can resize vertically, but width is fixed */
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    padding: 0;
+    border: none;
+    padding: 20px;
+    overflow: hidden;
+    
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: 500;
+
+}
+
+button {
+    background-color: rgb(255, 196, 0);
+    color: black;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    padding: 0;
+    border: none;
+    
+    font-family: inherit;
+    font-size: 28px;
+    font-weight: 500;
+}
+
+button:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+button:active {
+    background-color: rgb(112, 175, 76); /* Green */
+    color: white;
+}
