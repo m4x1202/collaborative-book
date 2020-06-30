@@ -12,9 +12,8 @@ https://pkg.go.dev/github.com/gorilla/websocket?tab=doc
 
 ## Setup
 
-- https://golang.org/ (version 1.11+)
-- go get github.com/gin-gonic/gin
-- go get github.com/gorilla/websocket
+- https://golang.org/ (version 1.14+)
+- go mod download
 
 
 ## Run
