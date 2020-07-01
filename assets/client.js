@@ -1,11 +1,65 @@
 
-console.log("Hello!");
 
-function autoResizeElement(target_element)
+var login_button = document.getElementById("login_button"); 
+var login_name_area = document.getElementById("login_name_area"); 
+var login_room_area = document.getElementById("login_room_area"); 
+var output_text_area = document.getElementById("output_text_area");
+var input_text_area = document.getElementById("input_text_area");
+var submit_story_view = document.getElementById("submit_story_view");
+var login_view = document.getElementById("login_view");
+var submit_story_button = document.getElementById("submit_story_button");
+var user_table = document.getElementById("user_table");
+var room_display_text = document.getElementById("room_display_text");
+var round_display_text = document.getElementById("round_display_text");
+
+disableLoginButton();
+var websocket = openConnectionToServer();
+showLoginView();
+
+///
+/// Handling showing and hiding views.
+///
+
+function hideAllViews()
 {
-    target_element.style.height = 'auto';
-    target_element.style.height = target_element.scrollHeight+'px';
+    submit_story_view.style.display = "none";
+    login_view.style.display = "none";
 }
+
+function showLoginView()
+{
+    hideAllViews();
+    login_view.style.display = "";
+}
+
+function showSubmitStoryView(current_stage, last_stage)
+{
+    hideAllViews();
+    submit_story_view.style.display = "";
+    room_display_text.innerHTML = login_room_area.value;
+    round_display_text.innerHTML = "Round " + current_stage + "/" + last_stage;
+    autoResizeElement(input_text_area);
+    autoResizeElement(output_text_area);
+    enableSubmitStoryButton();
+
+}
+
+function updateUserTable(user_list)
+{
+    // Clear table
+    user_table.innerHTML = "";
+    console.log(user_list)
+    for(var count in user_list)
+    {
+        var node = document.createElement("div");
+        node.innerHTML = user_list[count];
+        user_table.appendChild(node);
+    }
+}
+
+///
+/// Websocket connection handling and message sending / receiving.
+/// 
 
 function onReceiveMessageFromServer(message_event)
 {
@@ -13,17 +67,22 @@ function onReceiveMessageFromServer(message_event)
 
     var received_object = JSON.parse(json_string);
 
-    // TODO chane UI
-
-    var output_text_area = document.getElementById("output_text_area");
-    if(received_object.type === "text")
+    if(received_object.type === "submit_story")
     {
-        output_text_area.value = received_object.text;
+        output_text_area.value = received_object.payload;
+        showSubmitStoryView(4, 8);
     }
 
-    if(received_object.type === "registration")
+    if(received_object.type === "user_update")
+    {
+        updateUserTable(received_object.user_list);
+        showSubmitStoryView(4, 8);
+    }
+
+    if(received_object.type === "registration" && received_object.result === "success")
     {
         output_text_area.value = "Start typing a story!";
+        showSubmitStoryView(4, 8);
     }
     autoResizeElement(output_text_area);
 }
@@ -35,11 +94,7 @@ function sendToServer(websocket, json_object)
 
 function onConnectionEstablished()
 {
-    // Register with the server
-    var registration = { type : "registration", name : "Mobbel", room : "Doppelhaus" };
-    sendToServer(websocket, registration);
-
-    // TODO change UI
+    enableLoginButton();
 }
 
 function openConnectionToServer()
@@ -53,21 +108,57 @@ function openConnectionToServer()
     return websocket;
 }
 
-var websocket = openConnectionToServer();
+
+/// 
+/// Button related functions. 
+///
 
 function submitText()
 {
-    var text = document.getElementById("input_text_area").value;
+    var text = input_text_area.value;
 
-    var message = { type : "text", name : "Mobbel", room : "Doppelhaus", text : text };
+    var message = { type : "submit_story", name : login_name_area.value, room : login_room_area.value, payload : text };
     sendToServer(websocket, message);
+
+    input_text_area.value = "";
+    disableSubmitStoryButton();
 }
 
+function enterRoom()
+{
+    // Register with the server
+    var registration = { type : "registration", name : login_name_area.value, room : login_room_area.value, payload : "" };
+    sendToServer(websocket, registration);
 
+    // Disable login button so we don't send it again
+    disableLoginButton();
+}
 
-// Handle auto resizing of text areas
-// https://stackoverflow.com/questions/454202/creating-a-textarea-with-auto-resize
-// http://jsfiddle.net/CbqFv/
+function enableLoginButton()
+{
+    login_button.disabled = false;
+}
+
+function disableLoginButton()
+{
+    login_button.disabled = true;
+}
+
+function enableSubmitStoryButton()
+{
+    submit_story_button.disabled = false;
+}
+
+function disableSubmitStoryButton()
+{
+    submit_story_button.disabled = true;
+}
+
+///
+/// Handle auto resizing of text areas
+/// https://stackoverflow.com/questions/454202/creating-a-textarea-with-auto-resize
+/// http://jsfiddle.net/CbqFv/
+///
 
 var observe;
 if (window.attachEvent) {
@@ -80,25 +171,31 @@ else {
         element.addEventListener(event, handler, false);
     };
 }
-function initTextAreaObserver (element_id) {
-    var text = document.getElementById(element_id);
+
+function autoResizeElement(target_element)
+{
+    target_element.style.height = 'auto';
+    target_element.style.height = target_element.scrollHeight+'px';
+}
+
+function initTextAreaObserver (textarea) {
     function resize () {
-        autoResizeElement(text);
+        autoResizeElement(textarea);
     }
-    /* 0-timeout to get the already changed text */
+    // 0-timeout to get the already changed text
     function delayedResize () {
         window.setTimeout(resize, 0);
     }
-    observe(text, 'change',  resize);
-    observe(text, 'cut',     delayedResize);
-    observe(text, 'paste',   delayedResize);
-    observe(text, 'drop',    delayedResize);
-    observe(text, 'keydown', delayedResize);
+    observe(textarea, 'change',  resize);
+    observe(textarea, 'cut',     delayedResize);
+    observe(textarea, 'paste',   delayedResize);
+    observe(textarea, 'drop',    delayedResize);
+    observe(textarea, 'keydown', delayedResize);
 
-    text.focus();
-    text.select();
+    textarea.focus();
+    textarea.select();
     resize();
 }
 
-initTextAreaObserver("output_text_area");
-initTextAreaObserver("input_text_area");
+initTextAreaObserver(output_text_area);
+initTextAreaObserver(input_text_area);

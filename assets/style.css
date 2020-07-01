@@ -2,15 +2,34 @@
 	margin: 0 auto; 
 }
 
-.main_layout {
+.login_view_layout {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-gap: 10px;
     grid-auto-rows: minmax(50px, auto);
 }
 
-.title_text {
-    grid-column: 5 / 10;
+.submit_story_view_layout {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(50px, auto);
+}
+
+.room_display_text {
+    grid-column: 4 / 10;
+    grid-row: 2;
+
+    justify-self: start;
+    align-self: end;
+
+    font-family: inherit;
+    font-size: 40px;
+    font-weight: 500;
+}
+
+.round_display_text {
+    grid-column: 4 / 10;
     grid-row: 2;
 
     justify-self: end;
@@ -21,19 +40,54 @@
     font-weight: 500;
 }
 
+.login_name_area {
+    grid-column: 6 / 8;
+    grid-row: 3;
+
+    resize: none; 
+}
+
+.login_room_area {
+    grid-column: 6 / 8;
+    grid-row: 4;
+
+    resize: none; 
+}
+
+.login_button {
+    grid-column: 6 / 8;
+    grid-row: 5;
+}
+
 .output_text_area {
-    grid-column: 5 / 10;
+    grid-column: 4 / 10;
     grid-row: 3 / 5;
 }
 
 .input_text_area {
-    grid-column: 5 / 10;
+    grid-column: 4 / 10;
     grid-row: 5 / 7;
 }
 
-.submit_button {
-    grid-column: 5 / 10;
+.submit_story_button {
+    grid-column: 4 / 10;
     grid-row: 7;
+}
+
+.user_table {
+    grid-column: 2;
+    grid-row: 3 / 7;
+
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    padding: 0;
+    border: none;
+    padding: 20px;
+
+    display: grid;
+    
+    grid-template-columns: 100%;
+    grid-gap: 5px;
+    grid-auto-rows: 20px;
 }
 
 .side_bar
@@ -82,4 +136,9 @@ button:hover {
 button:active {
     background-color: rgb(112, 175, 76); /* Green */
     color: white;
+}
+
+button:disabled {
+    background-color: rgb(168, 168, 168); /* Green */
+    color: rgb(0, 0, 0);
 }
