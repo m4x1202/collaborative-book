@@ -10,6 +10,7 @@ var login_view = document.getElementById("login_view");
 var submit_story_button = document.getElementById("submit_story_button");
 var round_display_text = document.getElementById("round_display_text");
 var user_table = document.getElementById("user_table");
+var room_display_text = document.getElementById("room_display_text");
 
 disableLoginButton();
 var websocket = openConnectionToServer();
@@ -35,6 +36,7 @@ function showSubmitStoryView()
 {
     hideAllViews();
     submit_story_view.style.display = "";
+    room_display_text.innerHTML = login_room_area.value;
     autoResizeElement(input_text_area);
     autoResizeElement(output_text_area);
     enableSubmitStoryButton();

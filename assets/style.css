@@ -16,8 +16,20 @@
     grid-auto-rows: minmax(50px, auto);
 }
 
+.room_display_text {
+    grid-column: 4 / 10;
+    grid-row: 2;
+
+    justify-self: start;
+    align-self: end;
+
+    font-family: inherit;
+    font-size: 40px;
+    font-weight: 500;
+}
+
 .round_display_text {
-    grid-column: 5 / 10;
+    grid-column: 4 / 10;
     grid-row: 2;
 
     justify-self: end;
