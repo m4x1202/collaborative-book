@@ -55,7 +55,7 @@ function onReceiveMessageFromServer(message_event)
         showSubmitStoryView();
     }
 
-    if(received_object.type === "registration")
+    if(received_object.type === "registration" && received_object.result === "success")
     {
         output_text_area.value = "Start typing a story!";
         showSubmitStoryView();
@@ -93,7 +93,7 @@ function submitText()
 {
     var text = input_text_area.value;
 
-    var message = { type : "text", name : login_name_area.value, room : login_room_area.value, text : text };
+    var message = { type : "submit_story", name : login_name_area.value, room : login_room_area.value, payload : text };
     sendToServer(websocket, message);
 
     input_text_area.value = "";
@@ -103,7 +103,7 @@ function submitText()
 function enterRoom()
 {
     // Register with the server
-    var registration = { type : "registration", name : login_name_area.value, room : login_room_area.value };
+    var registration = { type : "registration", name : login_name_area.value, room : login_room_area.value, payload : "" };
     sendToServer(websocket, registration);
 
     // Disable login button so we don't send it again
