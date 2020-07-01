@@ -103,7 +103,7 @@ type UserUpdateMessage struct {
 
 func sendConnectedUsersUpdate(messageType int, room string) error {
 	message := UserUpdateMessage{
-		MessageType: "user_update", // TODO change to actual type
+		MessageType: "user_update",
 	}
 
 	for userName := range openConnections[room] {
