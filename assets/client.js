@@ -49,9 +49,15 @@ function onReceiveMessageFromServer(message_event)
 
     var received_object = JSON.parse(json_string);
 
-    if(received_object.type === "text")
+    if(received_object.type === "submit_story")
     {
-        output_text_area.value = received_object.text;
+        output_text_area.value = received_object.payload;
+        showSubmitStoryView();
+    }
+
+    if(received_object.type === "user_update")
+    {
+        output_text_area.value = received_object.user_list;
         showSubmitStoryView();
     }
 

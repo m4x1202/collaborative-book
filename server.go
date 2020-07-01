@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"sync"
 
 	log "github.com/sirupsen/logrus"
 
@@ -18,7 +19,7 @@ func main() {
 
 	// serve the client websocket
 	r.GET("/ws", func(c *gin.Context) {
-		wshandler(c.Writer, c.Request)
+		go wshandler(c.Writer, c.Request)
 	})
 
 	// serve static files under localhost:8080/assets - this is for css and js
@@ -54,17 +55,30 @@ type RegistrationResult struct {
 	Result      string `json:"result"`
 }
 
+var openConnectionMutex sync.Mutex
 var openConnections = make(map[string]map[string]*websocket.Conn)
+
+func debugPrintOpenConnections() {
+	for room, userMap := range openConnections {
+		for name, connection := range userMap {
+			log.Tracef("Room: %s, Name: %s, Connection %v", room, name, connection)
+		}
+	}
+}
 
 func register(message *Message, connection *websocket.Conn) (RegistrationResult, error) {
 
-	userMap := openConnections[message.Room]
-	if userMap == nil {
-		userMap = make(map[string]*websocket.Conn)
+	openConnectionMutex.Lock()
+	defer openConnectionMutex.Unlock()
+
+	if openConnections[message.Room] == nil {
+		openConnections[message.Room] = make(map[string]*websocket.Conn)
 	}
-	userMap[message.UserName] = connection
+	openConnections[message.Room][message.UserName] = connection
 
 	log.Printf("Registered user %s in room %s", message.UserName, message.Room)
+
+	debugPrintOpenConnections()
 
 	result := RegistrationResult{
 		MessageType: "registration",
@@ -75,6 +89,32 @@ func register(message *Message, connection *websocket.Conn) (RegistrationResult,
 
 func submitStory(message *Message) {
 
+}
+
+type UserUpdateMessage struct {
+	MessageType string   `json:"type"`
+	UserList    []string `json:"user_list"`
+}
+
+func sendConnectedUsersUpdate(messageType int, room string) error {
+	message := UserUpdateMessage{
+		MessageType: "user_update", // TODO change to actual type
+	}
+
+	for userName := range openConnections[room] {
+		message.UserList = append(message.UserList, userName)
+	}
+
+	marshalled, err := json.Marshal(message)
+	if err != nil {
+		return err
+	}
+
+	for _, connection := range openConnections[room] {
+		connection.WriteMessage(messageType, marshalled)
+	}
+
+	return nil
 }
 
 func wshandler(w http.ResponseWriter, r *http.Request) {
@@ -89,6 +129,8 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			break
 		}
+
+		log.Print("In Loop")
 
 		var message Message
 		err = json.Unmarshal(msg, &message)
@@ -113,12 +155,20 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 
 			conn.WriteMessage(t, marshalled)
 
+			err = sendConnectedUsersUpdate(t, message.Room)
+			if err != nil {
+				log.Error(err)
+				return
+			}
+
 		case "submit_story":
 			submitStory(&message)
 
 			// Use conn to send and receive messages.
 			conn.WriteMessage(t, msg)
 		}
-
 	}
+
+	log.Print("End")
+
 }
