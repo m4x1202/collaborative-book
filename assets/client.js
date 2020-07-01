@@ -8,9 +8,9 @@ var input_text_area = document.getElementById("input_text_area");
 var submit_story_view = document.getElementById("submit_story_view");
 var login_view = document.getElementById("login_view");
 var submit_story_button = document.getElementById("submit_story_button");
-var round_display_text = document.getElementById("round_display_text");
 var user_table = document.getElementById("user_table");
 var room_display_text = document.getElementById("room_display_text");
+var round_display_text = document.getElementById("round_display_text");
 
 disableLoginButton();
 var websocket = openConnectionToServer();
@@ -32,14 +32,16 @@ function showLoginView()
     login_view.style.display = "";
 }
 
-function showSubmitStoryView()
+function showSubmitStoryView(current_stage, last_stage)
 {
     hideAllViews();
     submit_story_view.style.display = "";
     room_display_text.innerHTML = login_room_area.value;
+    round_display_text.innerHTML = "Round " + current_stage + "/" + last_stage;
     autoResizeElement(input_text_area);
     autoResizeElement(output_text_area);
     enableSubmitStoryButton();
+
 }
 
 function updateUserTable(user_list)
@@ -68,19 +70,19 @@ function onReceiveMessageFromServer(message_event)
     if(received_object.type === "submit_story")
     {
         output_text_area.value = received_object.payload;
-        showSubmitStoryView();
+        showSubmitStoryView(4, 8);
     }
 
     if(received_object.type === "user_update")
     {
         updateUserTable(received_object.user_list);
-        showSubmitStoryView();
+        showSubmitStoryView(4, 8);
     }
 
     if(received_object.type === "registration" && received_object.result === "success")
     {
         output_text_area.value = "Start typing a story!";
-        showSubmitStoryView();
+        showSubmitStoryView(4, 8);
     }
     autoResizeElement(output_text_area);
 }
