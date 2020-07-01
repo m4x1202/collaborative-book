@@ -9,6 +9,7 @@ var submit_story_view = document.getElementById("submit_story_view");
 var login_view = document.getElementById("login_view");
 var submit_story_button = document.getElementById("submit_story_button");
 var round_display_text = document.getElementById("round_display_text");
+var user_table = document.getElementById("user_table");
 
 disableLoginButton();
 var websocket = openConnectionToServer();
@@ -39,6 +40,19 @@ function showSubmitStoryView()
     enableSubmitStoryButton();
 }
 
+function updateUserTable(user_list)
+{
+    // Clear table
+    user_table.innerHTML = "";
+    console.log(user_list)
+    for(var count in user_list)
+    {
+        var node = document.createElement("div");
+        node.innerHTML = user_list[count];
+        user_table.appendChild(node);
+    }
+}
+
 ///
 /// Websocket connection handling and message sending / receiving.
 /// 
@@ -57,7 +71,7 @@ function onReceiveMessageFromServer(message_event)
 
     if(received_object.type === "user_update")
     {
-        output_text_area.value = received_object.user_list;
+        updateUserTable(received_object.user_list);
         showSubmitStoryView();
     }
 
