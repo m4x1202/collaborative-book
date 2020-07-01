@@ -38,17 +38,58 @@ var wsupgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
+/// BEGIN Server/Client Interface
+
+/**
+ * Possible MessageTypes with according payload:
+ * 	registration()
+ * 	start_session(number of stages on start)
+ * 	close_room()
+ * 	submit_story(story text)
+ * 	show_story(user name and stage to show the story from)
+ */
 type ClientMessage struct {
-	MessageType string `json:"type"`
+	MessageType string `json:"type"` // registration, start_session, close_room, submit_story, show_story
 	Room        string `json:"room"`
 	UserName    string `json:"name"`
 	Payload     string `json:"payload"`
 }
 
 type RegistrationResult struct {
-	MessageType string `json:"type"`
+	MessageType string `json:"type"` // registration
 	Result      string `json:"result"`
 }
+
+type Player struct {
+	UserName string `json:"user_name"`
+	Status   string `json:"status"`
+	IsAdmin  bool   `json:"is_admin"`
+}
+
+type RoomUpdateMessage struct {
+	MessageType string   `json:"type"` // room_update
+	UserList    []Player `json:"user_list"`
+	ShowLobby   bool     `json:"show_lobby"`
+}
+
+type RoundUpdateMessage struct {
+	MessageType  string `json:"type"` // round_update
+	CurrentStage int    `json:"current_stage"`
+	LastStage    int    `json:"last_stage"`
+	Text         string `json:"text"`
+}
+
+type ShowStoryMessage struct {
+	MessageType string   `json:"type"` // show_story
+	UserName    string   `json:"user_name"`
+	Stories     []string `json:"stories"`
+}
+
+type CloseRoomMessage struct {
+	MessageType string `json:"type"` // close_room
+}
+
+/// END Server/Client Interface
 
 type UserStoryStage struct {
 	UserName string
@@ -96,16 +137,12 @@ func submitStory(message *ClientMessage) {
 
 }
 
-type UserUpdateMessage struct {
-	MessageType string   `json:"type"`
-	UserList    []string `json:"user_list"`
-}
-
 func sendConnectedUsersUpdate(messageType int, room string) error {
 	message := UserUpdateMessage{
 		MessageType: "user_update",
 	}
 
+	// TODO set is_admin true for first user
 	for userName := range openConnections[room] {
 		message.UserList = append(message.UserList, userName)
 	}
