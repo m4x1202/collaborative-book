@@ -29,21 +29,21 @@
 }
 
 .login_name_area {
-    grid-column: 5 / 7;
+    grid-column: 6 / 8;
     grid-row: 3;
 
     resize: none; 
 }
 
 .login_room_area {
-    grid-column: 5 / 7;
+    grid-column: 6 / 8;
     grid-row: 4;
 
     resize: none; 
 }
 
 .login_button {
-    grid-column: 5 / 7;
+    grid-column: 6 / 8;
     grid-row: 5;
 }
 
@@ -57,7 +57,7 @@
     grid-row: 5 / 7;
 }
 
-.submit_button {
+.submit_story_button {
     grid-column: 4 / 10;
     grid-row: 7;
 }
@@ -108,4 +108,9 @@ button:hover {
 button:active {
     background-color: rgb(112, 175, 76); /* Green */
     color: white;
+}
+
+button:disabled {
+    background-color: rgb(168, 168, 168); /* Green */
+    color: rgb(0, 0, 0);
 }

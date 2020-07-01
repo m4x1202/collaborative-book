@@ -8,8 +8,7 @@
   <div class="login_view_layout centered" id="login_view">
     <textarea class="login_name_area" id="login_name_area" rows="1" placeholder="Name"></textarea>
     <textarea class="login_room_area" id="login_room_area" rows="1" placeholder="Room"></textarea>
-    <button class="login_button" id="login_button">Enter Room</button>
-    <div class="side_bar" id="side_bar"></div>
+    <button class="login_button" id="login_button" onclick="enterRoom()">Enter Room</button>
   </div>
 
   <div class="submit_story_view_layout centered" id="submit_story_view"  style="display: none;">
@@ -18,10 +17,9 @@
     </div>
     <textarea class="output_text_area" id="output_text_area" disabled></textarea>
     <textarea class="input_text_area" id="input_text_area"></textarea>
-    <button class="submit_button" id="submit_button" onclick="submitText()">
+    <button class="submit_story_button" id="submit_story_button" onclick="submitText()">
       Submit
     </button>
-    <div class="side_bar" id="side_bar"></div>
   </div>
 </body>
 
