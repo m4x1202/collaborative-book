@@ -16,7 +16,7 @@
     grid-auto-rows: minmax(50px, auto);
 }
 
-.title_text {
+.round_display_text {
     grid-column: 5 / 10;
     grid-row: 2;
 

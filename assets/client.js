@@ -8,6 +8,7 @@ var input_text_area = document.getElementById("input_text_area");
 var submit_story_view = document.getElementById("submit_story_view");
 var login_view = document.getElementById("login_view");
 var submit_story_button = document.getElementById("submit_story_button");
+var round_display_text = document.getElementById("round_display_text");
 
 disableLoginButton();
 var websocket = openConnectionToServer();
