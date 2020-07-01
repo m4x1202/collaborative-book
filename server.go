@@ -38,12 +38,7 @@ var wsupgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-type User struct {
-	Name       string
-	Connection *websocket.Conn
-}
-
-type Message struct {
+type ClientMessage struct {
 	MessageType string `json:"type"`
 	Room        string `json:"room"`
 	UserName    string `json:"name"`
@@ -53,6 +48,16 @@ type Message struct {
 type RegistrationResult struct {
 	MessageType string `json:"type"`
 	Result      string `json:"result"`
+}
+
+type UserStoryStage struct {
+	UserName string
+	Story    string
+}
+
+type Room struct {
+	StoryStages []UserStoryStage
+	UserMap     map[string]*websocket.Conn
 }
 
 var openConnectionMutex sync.Mutex
@@ -66,7 +71,7 @@ func debugPrintOpenConnections() {
 	}
 }
 
-func register(message *Message, connection *websocket.Conn) (RegistrationResult, error) {
+func register(message *ClientMessage, connection *websocket.Conn) (RegistrationResult, error) {
 
 	openConnectionMutex.Lock()
 	defer openConnectionMutex.Unlock()
@@ -87,7 +92,7 @@ func register(message *Message, connection *websocket.Conn) (RegistrationResult,
 	return result, nil
 }
 
-func submitStory(message *Message) {
+func submitStory(message *ClientMessage) {
 
 }
 
@@ -132,7 +137,7 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 
 		log.Print("In Loop")
 
-		var message Message
+		var message ClientMessage
 		err = json.Unmarshal(msg, &message)
 		if err != nil {
 			log.Error(err)
