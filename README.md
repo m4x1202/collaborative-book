@@ -1,22 +1,7 @@
 # Collaborative Book
 
-## Overview
-
-Webserver with gin-gonic:
-https://github.com/gin-gonic/gin
-
-Websockets with gorilla:
-http://arlimus.github.io/articles/gin.and.gorilla/
-https://pkg.go.dev/github.com/gorilla/websocket?tab=doc
-
-
 ## Setup
 
-- https://golang.org/ (version 1.14+)
-- go mod download
+Run through all 'Project setup' steps in client/README.md
 
-
-## Run
-
-- go run .\server.go
-- and connect to :8080
+Afterward run through all 'Setup' steps in server/README.md
