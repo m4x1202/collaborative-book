@@ -4,21 +4,17 @@
             <v-col cols="2">
                 <v-card>
                     <v-card-text>
-                        <v-simple-table height="300">
-                            <v-slot>
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Players</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{ user }}</td>
-                                    </tr>
-                                </tbody>
-                            </v-slot>
-                        </v-simple-table>
+                        <v-list disabled dense height="300">
+                            <v-subheader>Players</v-subheader>
+                            <v-list-item  v-for="user in users" :key="user">
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="user" />
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>
                     </v-card-text>
+                    <v-divider />
+                    <v-btn class="mt-2 mx-auto" color="yellow darken-1" @click="startSession">Start Session</v-btn>
                 </v-card>
             </v-col>
             <v-col>
@@ -28,7 +24,7 @@
                         <div id="round_display_text">{{currentStage}}/{{lastStage}}</div>
                     </v-card-subtitle>
                     <v-card-text>
-                        <v-form id="submit-story-form" @submit.prevent="onSubmit">
+                        <v-form id="submit-story-form" @submit.prevent="submitStory">
                             <v-textarea>{{output}}</v-textarea>
                             <v-textarea v-model="input"></v-textarea>
                         </v-form>
@@ -39,6 +35,8 @@
                 </v-card>
             </v-col>
         </v-row>
+        <v-btn class="mt-2 mx-auto" color="yellow darken-1" @click="showStory">Show Story</v-btn>
+        <v-btn class="mt-2 mx-auto" color="yellow darken-1" @click="closeRoom">Close Room</v-btn>
     </v-container>
 </template>
 
@@ -47,15 +45,34 @@ export default {
   name: 'game',
   data: () => ({
     input: null,
-    users: ["1", "12", "123"]
+    output: "bla",
+    currentStage: 1,
+    lastStage: 1
   }),
-  methods: {
-    onSubmit() {
-      let story = {
-        input: this.input,
+  computed: {
+      room () {
+          return this.$store.state.room.id
+      },
+      users () {
+          return this.$store.state.room.users.map(x => x.user_name)
       }
-      this.$emit('submit-story', story)
-      this.input = null
+  },
+  methods: {
+    async submitStory() {
+        await this.$store
+            .dispatch('submitStory')
+    },
+    async startSession() {
+        await this.$store
+            .dispatch('startSession')
+    },
+    async showStory() {
+        await this.$store
+            .dispatch('showStory')
+    },
+    async closeRoom() {
+        await this.$store
+            .dispatch('closeRoom')
     }
   }
 };
