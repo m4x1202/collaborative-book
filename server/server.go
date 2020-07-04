@@ -138,13 +138,13 @@ func submitStory(message *ClientMessage) {
 }
 
 func sendConnectedUsersUpdate(messageType int, room string) error {
-	message := UserUpdateMessage{
+	message := RoomUpdateMessage{
 		MessageType: "user_update",
 	}
 
 	// TODO set is_admin true for first user
 	for userName := range openConnections[room] {
-		message.UserList = append(message.UserList, userName)
+		message.UserList = append(message.UserList, Player{UserName: userName})
 	}
 
 	marshalled, err := json.Marshal(message)
