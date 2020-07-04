@@ -14,6 +14,8 @@ npm run serve
 ```
 npm run build
 ```
+This will compile a runable version of the client into the servers 'client' directory.
+Once the server is started afterwards it will serve the compiled client
 
 ### Lints and fixes files
 ```
