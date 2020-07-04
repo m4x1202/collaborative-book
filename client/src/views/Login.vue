@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-content>
+        <v-main>
             <v-container fluid>
                 <v-layout align-center justify-center>
                     <v-card max-width="400" class="mx-auto mt-10">
@@ -8,7 +8,7 @@
                             <h1 class="display-1">Enter Room</h1>
                         </v-card-title>
                         <v-card-text>
-                            <v-form id="login-form" @submit.prevent="login">
+                            <v-form id="login-form" @submit.prevent="registration">
                                 <v-text-field
                                     prepend-icon="mdi-account-circle"
                                     label="Name"
@@ -28,7 +28,7 @@
                     </v-card>
                 </v-layout>
             </v-container>
-        </v-content>
+        </v-main>
     </v-app>
 </template>
 
@@ -39,9 +39,9 @@ export default {
         room: ''
     }),
     methods: {
-        async login() {
+        async registration() {
             await this.$store
-                .dispatch('login', { username: this.username, room: this.room })
+                .dispatch('registration', { username: this.username, room: this.room })
                 .then(() => this.$router.push('/'))
         }
     }
