@@ -23,30 +23,32 @@
                             </v-list-item>
                         </v-list>
                     </v-card-text>
-                    <v-divider />
-                    <v-container>
-                        <v-form id="stagesForm" ref="stagesForm" v-model="valid" lazy-validation @submit.prevent="validate">
-                            <v-row no-gutters>
-                                <v-col>
-                                    <v-text-field
-                                        v-model.number="stages"
-                                        :rules="[v => (v > 0)]"
-                                        type="number"
-                                        autofocus
-                                        required
-                                        :suffix="stages > 1 ? 'stages' : 'stage'"
-                                        solo
-                                        dense
-                                        hide-details
-                                    ></v-text-field>
-                                </v-col>
-                                <v-spacer />
-                                <v-col>
-                                    <v-btn :disabled="!valid" type="submit" color="yellow darken-1" form="stagesForm">Start Session</v-btn>
-                                </v-col>
-                            </v-row>
-                        </v-form>
-                    </v-container>
+                    <div v-if="userIsAdmin">
+                        <v-divider />
+                        <v-container>
+                            <v-form id="stagesForm" ref="stagesForm" v-model="valid" lazy-validation @submit.prevent="validate">
+                                <v-row no-gutters>
+                                    <v-col>
+                                        <v-text-field
+                                            v-model.number="stages"
+                                            :rules="[v => (v > 0)]"
+                                            type="number"
+                                            autofocus
+                                            required
+                                            :suffix="stages > 1 ? 'stages' : 'stage'"
+                                            solo
+                                            dense
+                                            hide-details
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-spacer />
+                                    <v-col>
+                                        <v-btn :disabled="!valid" type="submit" color="yellow darken-1" form="stagesForm">Start Session</v-btn>
+                                    </v-col>
+                                </v-row>
+                            </v-form>
+                        </v-container>
+                    </div>
                 </v-card>
             </v-container>
         </v-responsive>
@@ -72,7 +74,7 @@ export default {
             }
         },
         showLoadingDialog() {
-            return this.userIsAdmin === false
+            return this.userIsAdmin == false
         },
         ...mapState({
             userIsAdmin: state => state.user.isAdmin,
