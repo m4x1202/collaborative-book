@@ -1,5 +1,7 @@
 import Vue from 'vue'
 
+export const SET_STORIES = 'SET_STORIES'
+
 const showStoryPayload = {
     type: 'show_story',
     name: null,
@@ -14,12 +16,26 @@ const closeRoomPayload = {
     payload: ''
 }
 
+const state = () => ({
+    stories: [],
+})
+
+const mutations = {
+    [SET_STORIES](state, stories) {
+        state.stories = stories
+    },
+}
+
 const actions = {
-    showStory({ rootState, rootGetters }) {
+    displayStory({ commit }, { stories, userName }) {
+        console.log(userName)
+        commit(SET_STORIES, stories)
+    },
+    showStory({ rootState, rootGetters }, { player, stage}) {
         //Prepare payload
         showStoryPayload.name = rootState.user.userName
         showStoryPayload.room = rootState.room.id
-        showStoryPayload.payload = JSON.stringify({ user_name: rootState.user.userName, stage: 1 })
+        showStoryPayload.payload = JSON.stringify({ user_name: player, stage: stage })
 
         if(rootGetters.connectedToServer) {
             Vue.prototype.$socket.sendObj(showStoryPayload)
@@ -42,8 +58,8 @@ const actions = {
 
 export default {
     namespaced: true,
-    state: {},
+    state,
     getters: {},
     actions,
-    mutations: {}
+    mutations
 }

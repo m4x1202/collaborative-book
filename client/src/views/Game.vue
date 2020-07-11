@@ -30,7 +30,7 @@
                     <v-card class="mt-n1">
                         <v-card-text>
                             <v-form id="submit-story-form" @submit.prevent="submitStory">
-                                <v-textarea readonly outlined no-resize placeholder="The last book line will appear here once created" v-model="output">{{output}}</v-textarea>
+                                <v-textarea readonly outlined no-resize placeholder="The last book line will appear here once created" :value="output"></v-textarea>
                                 <v-textarea :disabled="!(userStatus == 'writing')" no-resize clearable autofocus v-model="input"></v-textarea>
                             </v-form>
                         </v-card-text>

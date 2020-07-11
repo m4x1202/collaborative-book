@@ -74,7 +74,7 @@ const actions = {
                 dispatch('game/roundUpdate', { current: message.current_stage, last: message.last_stage, text: message.text })
             break
             case "show_story":
-                dispatch('result/showStory', { stories: message.stories, userName: message.user_name })
+                dispatch('result/displayStory', { stories: message.stories, userName: message.user_name })
             break
             case "close_room":
                 dispatch('user/reset')
