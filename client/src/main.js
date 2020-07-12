@@ -1,22 +1,19 @@
-import Vue from 'vue';
+import Vue from 'vue'
 
-import App from './App.vue';
+import App from './App.vue'
 
-import store from './store';
-import router from './router';
-
-import vuetify from './plugins/vuetify';
+import vuetify from './plugins/vuetify'
+import store from './store'
+import router from './router'
 import socket from './plugins/vue-native-websocket'
 
-router.beforeEach(async (to, from, next) => {
-    if (store.state.userName == null && to.name !== 'login') {
-    router.push('/login');
-    }
-    if (store.state.userName != null && to.name === 'login') {
-    router.push('/');
-    }
-    next();
-});
+router.beforeEach((to, from, next) => {
+    if (!store.state.user.isAuthenticated && to.name !== 'login') next({ name: 'login' })
+    else if (store.state.user.isAuthenticated && to.name === 'login') next('/')
+    else next()
+})
+
+Vue.config.productionTip = false
 
 new Vue({
     router,
@@ -24,4 +21,4 @@ new Vue({
     vuetify,
     socket,
     render: h => h(App)
-}).$mount('#app');
+}).$mount('#app')
