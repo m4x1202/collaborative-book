@@ -21,7 +21,7 @@ func main() {
 
 	// websocket
 	server := gin.Default()
-	server.GET("/", func(c *gin.Context) {
+	server.GET("/socket.io", func(c *gin.Context) {
 		go handleWebsocket(c.Writer, c.Request)
 	})
 	server.Run(":8081")
