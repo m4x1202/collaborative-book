@@ -3,7 +3,7 @@ import VueNativeSock from 'vue-native-websocket'
 
 import store from '../store'
 
-Vue.use(VueNativeSock, 'ws://localhost:8081', {
+Vue.use(VueNativeSock, 'ws://' + (process.env.SERVER_HOST || localStorage.getItem("SERVER_HOST")) + ':' + (process.env.SERVER_PORT || localStorage.getItem("SERVER_PORT")), {
     reconnection: true,
     reconnectionDelay: 3000,
     store: store,
