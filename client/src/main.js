@@ -5,7 +5,7 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import store from './store'
 import router from './router'
-import socket from './plugins/vue-native-websocket'
+import socket from './plugins/vue-socket.io'
 
 router.beforeEach((to, from, next) => {
     if (!store.state.user.isAuthenticated && to.name !== 'login') next({ name: 'login' })
