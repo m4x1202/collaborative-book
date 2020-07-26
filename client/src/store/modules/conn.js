@@ -5,6 +5,11 @@ import { SET_ROOM_USERS } from './room'
 
 export const SET_SOCKET = 'SET_SOCKET'
 
+function closeSocket() {
+    Vue.prototype.$socket.close()
+    delete Vue.prototype.$socket
+}
+
 const state = () => ({
     socket: {
         isConnected: false,
@@ -30,12 +35,19 @@ const actions = {
         Vue.prototype.$socket = event.currentTarget
         console.log(event.currentTarget)
         commit(SET_SOCKET, { isConnected: true, reconnectError: false })
+        window.addEventListener('beforeunload', closeSocket)
     },
-    SOCKET_ONCLOSE({ commit }) {
+    SOCKET_ONCLOSE({ state, commit }) {
         commit(SET_SOCKET, { isConnected: false, reconnectError: false })
+        if (state.socket.isConnected) {
+            window.removeEventListener('beforeunload', closeSocket)
+        }
     },
     SOCKET_ONERROR({ state }, event) {
         console.error(state, event)
+        if (state.socket.isConnected) {
+            window.removeEventListener('beforeunload', closeSocket)
+        }
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE({ commit, dispatch, rootState }, message) {
