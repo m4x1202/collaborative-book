@@ -40,6 +40,8 @@ const actions = {
         commit(SET_OUTPUT, text)
         commit(SET_CURRENT_STAGE, current)
         commit(SET_LAST_STAGE, last)
+        var audio = new Audio('http://soundbible.com/mp3/Air Plane Ding-SoundBible.com-496729130.mp3');
+        audio.play();
     },
     submitStory({ state, commit, rootState, rootGetters }) {
         //Prepare payload
