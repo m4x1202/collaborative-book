@@ -68,7 +68,7 @@ export default {
             lastStage: state => state.game.lastStage,
             output: state => state.game.output,
             roomId: state => state.room.id,
-            players: state => state.room.users.map(x => x.user_name)
+            players: state => state.room.users.map(x => x.user_name).sort()
         })
     },
     methods: mapActions('game', [

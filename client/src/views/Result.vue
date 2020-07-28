@@ -62,7 +62,7 @@ export default {
         ...mapState({
             userIsAdmin: state => state.user.isAdmin,
             roomId: state => state.room.id,
-            players: state => state.room.users.map(x => x.user_name),
+            players: state => state.room.users.map(x => x.user_name).sort(),
             stories: state => state.result.stories
         })
     },
