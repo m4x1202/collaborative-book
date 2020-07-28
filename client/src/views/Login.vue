@@ -27,7 +27,7 @@
                     </v-card-text>
                     <v-divider />
                     <v-card-actions>
-                        <v-btn :disabled="!valid" type="submit" width="200" class="mx-auto" color="yellow darken-1" form="loginForm">Enter Room</v-btn>
+                        <v-btn :disabled="!(valid && connectedToServer)" type="submit" width="200" class="mx-auto" color="yellow darken-1" form="loginForm">Enter Room</v-btn>
                     </v-card-actions>
                 </v-card>
                 <v-card class="mt-5">
