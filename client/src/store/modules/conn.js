@@ -6,6 +6,7 @@ import { SET_ROOM_USERS } from './room'
 export const SET_SOCKET = 'SET_SOCKET'
 
 function closeSocket() {
+    console.log("Closing socket")
     Vue.prototype.$socket.close()
     delete Vue.prototype.$socket
 }
@@ -52,47 +53,47 @@ const actions = {
     // default handler called for all methods
     SOCKET_ONMESSAGE({ commit, dispatch, rootState }, message) {
         console.log(message)
-        switch(message.type) {
+        switch (message.type) {
             case "registration":
-                if(message.result === "success") {
+                if (message.result === "success") {
                     commit('user/' + SET_USER_AUTHENTICATED, true)
                     router.push('/')
                 }
-            break
+                break
             case "room_update":
                 commit('room/' + SET_ROOM_USERS, message.user_list)
                 message.user_list.forEach((user) => {
-                    if(user.user_name === rootState.user.userName) {
+                    if (user.user_name === rootState.user.userName) {
                         commit('user/' + SET_USER_STATUS, user.status)
-                        if(user.is_admin) {
+                        if (user.is_admin) {
                             commit('user/' + SET_USER_ADMIN, true)
                         }
                     }
                 })
-                switch(message.room_state) {
+                switch (message.room_state) {
                     case 1:
-                        if(router.currentRoute.name !== 'game') {
+                        if (router.currentRoute.name !== 'game') {
                             router.push({ name: 'game' })
                         }
                         break
                     case 2:
-                        if(router.currentRoute.name !== 'result') {
+                        if (router.currentRoute.name !== 'result') {
                             router.push({ name: 'result' })
                         }
                         break
                 }
-            break
+                break
             case "round_update":
                 dispatch('game/roundUpdate', { current: message.current_stage, last: message.last_stage, text: message.text })
-            break
+                break
             case "show_story":
                 dispatch('result/displayStory', { stories: message.stories, userName: message.user_name })
-            break
+                break
             case "close_room":
                 dispatch('user/reset')
                 dispatch('room/reset')
                 router.push('/login')
-            break
+                break
             default:
         }
     },
